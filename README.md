@@ -5,10 +5,10 @@ Initiate a client-server communication channel using PowerShell
 
 This is an old module I wrote back in 2019, so the code is not as savvy.  
 It can get some improvements in regards to clean code, readability, error-handling, SRP, KISS, .Net types with C#, etc...  
-But the functions work nonetheless, it does what it's supposed to do.
-Also the Pester tests were written for Pester v4, so they won't work with Pester v5, they need to be updated
-I may spend a bit of time on the module at some stage if I have a break, we'll see.
-
+But the functions work nonetheless, it does what it's supposed to do.  
+Also the Pester tests were written for Pester v4, so they won't work with Pester v5, they need to be updated.  
+I may spend a bit of time on the module at some stage if I have a break, we'll see.  
+  
 Since this was an old module that I happened to restore from my computer, I've also added an extra folder with my notes from back then, as they are handy and give some context, even though they are not needed for the module to work.
 
 
