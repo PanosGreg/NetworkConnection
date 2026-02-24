@@ -219,7 +219,7 @@ Process {
     if ($Transport -eq 'Pipes') {
         $Instances         = [int]1
         $Security          = [System.IO.Pipes.PipeSecurity]::new()
-        $AccRulIdentity    = 'Everyone'    #[System.Security.Principal.NTAccount]::new('Everyone')
+        $AccRulIdentity    = [System.Security.Principal.NTAccount]::new('Everyone')
         $AccRulRights      = [System.IO.Pipes.PipeAccessRights]::FullControl
         $AccRulControlType = [System.Security.AccessControl.AccessControlType]::Allow
         $AccessRule        = [System.IO.Pipes.PipeAccessRule]::new($AccRulIdentity,$AccRulRights,$AccRulControlType)
