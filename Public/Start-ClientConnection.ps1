@@ -74,7 +74,7 @@ Process {
         $PipeOpt      = [System.IO.Pipes.PipeOptions]::None
         $PipeLvl      = [System.Security.Principal.TokenImpersonationLevel]::Impersonation
         $Constructor  = $ComputerName, $PipeName, $PipeDir, $PipeOpt, $PipeLvl
-        try  {$Stream = New-Object System.IO.Pipes.NamedPipeClientStream($Constructor)}
+        try  {$Stream = New-Object -TypeName System.IO.Pipes.NamedPipeClientStream -ArgumentList $Constructor}
         catch{Throw $_ }
         try  {$Stream.Connect(($Timeout*1000))}
         catch{

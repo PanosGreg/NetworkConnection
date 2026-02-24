@@ -1,6 +1,6 @@
 
 
-Constructor:
+Constructors:
 
 System.IO.Pipes.NamedPipeServerStream new(
   string                               pipeName,                     # 1
@@ -12,3 +12,56 @@ System.IO.Pipes.NamedPipeServerStream new(
   int                                  outBufferSize                 # 7
 )
 
+System.IO.Pipes.PipeAccessRule new(
+  string                                          identity,
+  System.IO.Pipes.PipeAccessRights                rights,
+  System.Security.AccessControl.AccessControlType type
+)
+
+System.IO.Pipes.NamedPipeClientStream new(
+  string                                            serverName,
+  string                                            pipeName,
+  System.IO.Pipes.PipeDirection                     direction,
+  System.IO.Pipes.PipeOptions                       options,
+  System.Security.Principal.TokenImpersonationLevel impersonationLevel
+)
+
+***  NOTE  ***
+The account that runs both the client and the server must be the same.
+Meaning that the username and password of the user that runs the terminal, must be the same for both the client and server.
+This is what the ImpersonationLevel = "Impersonation" means.
+
+Link: https://learn.microsoft.com/en-us/dotnet/api/system.security.principal.tokenimpersonationlevel
+
+Name	          Value	Description
+None	          0	    An impersonation level is not assigned.
+Anonymous	      1	    The server process cannot obtain identification information about the client, and it cannot impersonate the client.
+Identification	2	    The server process can obtain information about the client, such as security identifiers and privileges, but it cannot impersonate the client. This is useful for servers that export their own objects, for example, database products that export tables and views. Using the retrieved client-security information, the server can make access-validation decisions without being able to use other services that are using the client's security context.
+Impersonation 	3	    The server process can impersonate the client's security context on its local system. The server cannot impersonate the client on remote systems.
+Delegation    	4	    The server process can impersonate the client's security context on remote systems.
+
+Remark: Impersonation is the ability of a process to take on the security attributes of another process.
+
+About Security:
+We use "Everyone" which means there is no authentication happening.
+Anyone can use this named pipe. This is not secure.
+
+
+Named Pipes Test:
+
+=== on console #1 ===
+Remove-Module NetworkConnection -EA Ignore
+Import-Module .\NetworkConnection.psd1 -DisableNameChecking
+
+$con = Start-ServerConnection -Transport Pipes -PipeName test -Timeout 20 -Verbose
+ReceiveFrom-NetworkConnection -Connection $con  -Verbose   # <-- this BLOCKS
+Stop-NetworkConnection -Connection $con -Verbose
+
+
+=== on console #2 ===
+Remove-Module NetworkConnection -EA Ignore
+Import-Module .\NetworkConnection.psd1 -DisableNameChecking
+
+$con = Start-ClientConnection -ComputerName . -Transport Pipes -PipeName test -Timeout 20 -Verbose # <-- this BLOCKS
+SendTo-NetworkConnection -Connection $con -Data 'just a test'
+Stop-NetworkConnection -Connection $con -Verbose

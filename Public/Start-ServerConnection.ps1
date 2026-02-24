@@ -218,12 +218,11 @@ Process {
 
     if ($Transport -eq 'Pipes') {
         $Instances         = [int]1
-        $Security          = New-Object System.IO.Pipes.PipeSecurity
-        $AccRulIdentity    = 'Everyone'
-        $AccRulRights      = 'FullControl'
-        $AccRulControlType = 'Allow'
-        $AccRulConstructor = @($AccRulIdentity,$AccRulRights,$AccRulControlType)
-        $AccessRule        = New-Object System.IO.Pipes.PipeAccessRule($AccRulConstructor)
+        $Security          = [System.IO.Pipes.PipeSecurity]::new()
+        $AccRulIdentity    = 'Everyone'    #[System.Security.Principal.NTAccount]::new('Everyone')
+        $AccRulRights      = [System.IO.Pipes.PipeAccessRights]::FullControl
+        $AccRulControlType = [System.Security.AccessControl.AccessControlType]::Allow
+        $AccessRule        = [System.IO.Pipes.PipeAccessRule]::new($AccRulIdentity,$AccRulRights,$AccRulControlType)
         $Security.AddAccessRule($AccessRule)
         $Direction         = [System.IO.Pipes.PipeDirection]::InOut
         $TransmissionMode  = [System.IO.Pipes.PipeTransmissionMode]::Message
@@ -242,7 +241,7 @@ Process {
             $PipeConstructor = $PipeName,$Direction,$Instances,$TransmissionMode,$Option,$InBuffer,$OutBuffer
         }
 
-        try   { $Stream    = New-Object System.IO.Pipes.NamedPipeServerStream($PipeConstructor)}
+        try   { $Stream    = New-Object -TypeName System.IO.Pipes.NamedPipeServerStream -ArgumentList $PipeConstructor}
         catch { Throw $_ }
         try   { $Connect   = $Stream.BeginWaitForConnection($null, $null)}
         catch { Throw $_ }
@@ -319,7 +318,7 @@ Process {
             Throw $_
         }
 
-        $Stream            = $TcpConnection.GetStream()
+        $Stream       = $TcpConnection.GetStream()
         $EventDetails = Get-ServerInfo $Transport $ServerPort
         New-Event -SourceIdentifier 'Server.Started' -Sender "$Transport.Server" -EventArguments $EventDetails | Out-Null
         
