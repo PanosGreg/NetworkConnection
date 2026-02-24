@@ -100,7 +100,7 @@ Process {
         $ServerPort      = if ($PSBoundParameters.ContainsKey('PortName')) {[PortNumber]::($PSBoundParameters['PortName']).Value__}
                            elseif ($PSBoundParameters.ContainsKey('PortNumber')) {$PSBoundParameters['PortNumber']}
                            else {[PortNumber]::($DefaultValue['PortName']).Value__}
-        $TcpClient       = New-Object System.Net.Sockets.TcpClient
+        $TcpClient       = [System.Net.Sockets.TcpClient]::new()
         $TcpClient.Client.ReceiveTimeout = $Timeout * 1000
 
         $Stopwatch       = [Diagnostics.Stopwatch]::StartNew()
@@ -123,7 +123,7 @@ Process {
         # NOTE: I'm not using the Begin/End Connect() methods, because that way you always had to
         #       start the server first and then the client in order for the connection to work.
         #       but now you can start either one and it will still connect, within the timeout limit.
-        $Stream              = $TcpClient.GetStream()
+        $Stream = $TcpClient.GetStream()
 
         try   { $OutputObj.StreamReader  = [System.IO.StreamReader]::new($Stream)
                 $OutputObj.StreamWriter  = [System.IO.StreamWriter]::new($Stream)
