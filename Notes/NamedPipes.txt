@@ -1,0 +1,14 @@
+
+
+Constructor:
+
+System.IO.Pipes.NamedPipeServerStream new(
+  string                               pipeName,                     # 1
+  System.IO.Pipes.PipeDirection        direction,                    # 2
+  int                                  maxNumberOfServerInstances,   # 3
+  System.IO.Pipes.PipeTransmissionMode transmissionMode,             # 4
+  System.IO.Pipes.PipeOptions          options,                      # 5
+  int                                  inBufferSize,                 # 6
+  int                                  outBufferSize                 # 7
+)
+

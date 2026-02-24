@@ -238,7 +238,7 @@ Process {
         if ($Ver.Major -eq 4) {
             $PipeConstructor = $PipeName,$Direction,$Instances,$TransmissionMode,$Option,$InBuffer,$OutBuffer,$Security,$Inheritability
         }
-        elseif ($Ver.Major -eq 7) {
+        elseif ($Ver.Major -ge 5) {
             $PipeConstructor = $PipeName,$Direction,$Instances,$TransmissionMode,$Option,$InBuffer,$OutBuffer
         }
 
